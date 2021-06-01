@@ -65,18 +65,20 @@ class RoutingV1(
                         }
                         get("/{idPost}/get-posts-before") {
                             val me = call.authentication.principal<AuthUserModel>()
-                            val idPost = call.parameters["idPost"]?.toLongOrNull() ?: throw ParameterConversionException(
-                                "idPost",
-                                "Long"
-                            )
+                            val idPost =
+                                call.parameters["idPost"]?.toLongOrNull() ?: throw ParameterConversionException(
+                                    "idPost",
+                                    "Long"
+                                )
                             val response = postService.getPostsBefore(idPost, me!!.idUser, userService)
                             call.respond(response)
                         }
-                        get ("/{idPost}/reaction-by-users") {
-                            val idPost = call.parameters["idPost"]?.toLongOrNull() ?: throw ParameterConversionException(
-                                "idPost",
-                                "Long"
-                            )
+                        get("/{idPost}/reaction-by-users") {
+                            val idPost =
+                                call.parameters["idPost"]?.toLongOrNull() ?: throw ParameterConversionException(
+                                    "idPost",
+                                    "Long"
+                                )
                             val response = userService.listUsersReaction(idPost, postService)
                             call.respond(response)
                         }
@@ -88,29 +90,26 @@ class RoutingV1(
                         }
                         post("/{idPost}/up") {
                             val me = call.authentication.principal<AuthUserModel>()
-                            val idPost = call.parameters["idPost"]?.toLongOrNull() ?: throw ParameterConversionException(
-                                "idPost",
-                                "Long"
-                            )
+                            val idPost =
+                                call.parameters["idPost"]?.toLongOrNull() ?: throw ParameterConversionException(
+                                    "idPost",
+                                    "Long"
+                                )
                             val response = postService.upById(idPost, me!!.idUser, userService)
                             call.respond(response)
                         }
 
                         post("/{idPost}/down") {
                             val me = call.authentication.principal<AuthUserModel>()
-                            val idPost = call.parameters["idPost"]?.toLongOrNull() ?: throw ParameterConversionException(
-                                "idPost",
-                                "Long"
-                            )
+                            val idPost =
+                                call.parameters["idPost"]?.toLongOrNull() ?: throw ParameterConversionException(
+                                    "idPost",
+                                    "Long"
+                                )
                             val response = postService.downById(idPost, me!!.idUser, userService)
                             call.respond(response)
                         }
 
-                        post("/media") {
-                            val multipart = call.receiveMultipart()
-                            val response = fileService.save(multipart)
-                            call.respond(response)
-                        }
 
                         get("/me") {
                             val me = call.authentication.principal<AuthUserModel>()
@@ -137,7 +136,15 @@ class RoutingV1(
                         }
                     }
 
-                                    }
+                    route("/media") {
+                        post {
+                            val multipart = call.receiveMultipart()
+                            val response = fileService.save(multipart)
+                            call.respond(response)
+                        }
+                    }
+
+                }
             }
         }
     }
