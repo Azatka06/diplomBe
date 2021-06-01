@@ -13,13 +13,15 @@ import ru.sagutdinov.dto.PostRequestDto
 import ru.sagutdinov.dto.UserRequestDto
 import ru.sagutdinov.dto.UserResponseDto
 import ru.sagutdinov.model.AuthUserModel
+import ru.sagutdinov.service.FileService
 import ru.sagutdinov.service.ServicePost
 import ru.sagutdinov.service.UserService
 
 class RoutingV1(
     private val staticPath: String,
     private val postService: ServicePost,
-    private val userService: UserService
+    private val userService: UserService,
+    private val fileService: FileService
 ) {
     @KtorExperimentalAPI
     fun setup(configuration: Routing) {
@@ -104,6 +106,12 @@ class RoutingV1(
                             call.respond(response)
                         }
 
+                        post("/media") {
+                            val multipart = call.receiveMultipart()
+                            val response = fileService.save(multipart)
+                            call.respond(response)
+                        }
+
                         get("/me") {
                             val me = call.authentication.principal<AuthUserModel>()
                             val response = postService.getUserPosts(me!!.idUser, userService)
@@ -128,7 +136,8 @@ class RoutingV1(
                             }
                         }
                     }
-                }
+
+                                    }
             }
         }
     }
