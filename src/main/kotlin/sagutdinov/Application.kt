@@ -94,6 +94,7 @@ fun Application.module(testing: Boolean = false) {
             RoutingV1(
                 instance(tag = "upload-dir"),
                 instance(),
+                instance(),
                 instance()
             )
         }
