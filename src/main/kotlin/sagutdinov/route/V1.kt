@@ -13,15 +13,13 @@ import ru.sagutdinov.dto.PostRequestDto
 import ru.sagutdinov.dto.UserRequestDto
 import ru.sagutdinov.dto.UserResponseDto
 import ru.sagutdinov.model.AuthUserModel
-import ru.sagutdinov.service.FileService
 import ru.sagutdinov.service.ServicePost
 import ru.sagutdinov.service.UserService
 
 class RoutingV1(
-        private val staticPath: String,
-        private val postService: ServicePost,
-        private val userService: UserService,
-        private val fileService: FileService
+    private val staticPath: String,
+    private val postService: ServicePost,
+    private val userService: UserService
 ) {
     @KtorExperimentalAPI
     fun setup(configuration: Routing) {
@@ -51,11 +49,10 @@ class RoutingV1(
 
                     route("/posts") {
                         get("/{idPosts}") {
-                            val id = call.parameters["id"]?.toLongOrNull()
-                                    ?: throw ParameterConversionException(
-                                            "id",
-                                            "Long"
-                                    )
+                            val id = call.parameters["id"]?.toLongOrNull() ?: throw ParameterConversionException(
+                                "id",
+                                "Long"
+                            )
                             val response = postService.getByIdPost(id)
                             call.respond(response)
                         }
@@ -66,20 +63,18 @@ class RoutingV1(
                         }
                         get("/{idPost}/get-posts-before") {
                             val me = call.authentication.principal<AuthUserModel>()
-                            val idPost = call.parameters["idPost"]?.toLongOrNull()
-                                    ?: throw ParameterConversionException(
-                                            "idPost",
-                                            "Long"
-                                    )
+                            val idPost = call.parameters["idPost"]?.toLongOrNull() ?: throw ParameterConversionException(
+                                "idPost",
+                                "Long"
+                            )
                             val response = postService.getPostsBefore(idPost, me!!.idUser, userService)
                             call.respond(response)
                         }
-                        get("/{idPost}/reaction-by-users") {
-                            val idPost = call.parameters["idPost"]?.toLongOrNull()
-                                    ?: throw ParameterConversionException(
-                                            "idPost",
-                                            "Long"
-                                    )
+                        get ("/{idPost}/reaction-by-users") {
+                            val idPost = call.parameters["idPost"]?.toLongOrNull() ?: throw ParameterConversionException(
+                                "idPost",
+                                "Long"
+                            )
                             val response = userService.listUsersReaction(idPost, postService)
                             call.respond(response)
                         }
@@ -91,22 +86,20 @@ class RoutingV1(
                         }
                         post("/{idPost}/up") {
                             val me = call.authentication.principal<AuthUserModel>()
-                            val idPost = call.parameters["idPost"]?.toLongOrNull()
-                                    ?: throw ParameterConversionException(
-                                            "idPost",
-                                            "Long"
-                                    )
+                            val idPost = call.parameters["idPost"]?.toLongOrNull() ?: throw ParameterConversionException(
+                                "idPost",
+                                "Long"
+                            )
                             val response = postService.upById(idPost, me!!.idUser, userService)
                             call.respond(response)
                         }
 
                         post("/{idPost}/down") {
                             val me = call.authentication.principal<AuthUserModel>()
-                            val idPost = call.parameters["idPost"]?.toLongOrNull()
-                                    ?: throw ParameterConversionException(
-                                            "idPost",
-                                            "Long"
-                                    )
+                            val idPost = call.parameters["idPost"]?.toLongOrNull() ?: throw ParameterConversionException(
+                                "idPost",
+                                "Long"
+                            )
                             val response = postService.downById(idPost, me!!.idUser, userService)
                             call.respond(response)
                         }
@@ -126,22 +119,13 @@ class RoutingV1(
 
                         delete("/{idPost}") {
                             val me = call.authentication.principal<AuthUserModel>()
-                            val id = call.parameters["idPost"]?.toLongOrNull()
-                                    ?: throw ParameterConversionException(
-                                            "idPost",
-                                            "Long"
-                                    )
+                            val id = call.parameters["idPost"]?.toLongOrNull() ?: throw ParameterConversionException(
+                                "idPost",
+                                "Long"
+                            )
                             if (!postService.removePostByIdPost(id, me!!)) {
                                 println("You can't delete post of another user")
                             }
-                        }
-                    }
-
-                    route("/media") {
-                        post {
-                            val multipart = call.receiveMultipart()
-                            val response = fileService.save(multipart)
-                            call.respond(response)
                         }
                     }
                 }
