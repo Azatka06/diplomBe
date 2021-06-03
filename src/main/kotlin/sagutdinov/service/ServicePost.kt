@@ -32,6 +32,7 @@ class ServicePost (private val repo: PostRepository) {
                 postName = input.postName,
                 postText = input.postText,
                 link = input.link,
+                attachmentImage = input.attachmentImage,
                 idUser = idUser
 
 

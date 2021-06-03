@@ -10,6 +10,7 @@ data class PostModel (
     val link: String? = null,
     val postName: String? = null,
     val postText: String? = null,
+    val attachmentImage: String,
     val idUser: Long,
     val user: AuthUserModel? = null,
     val attachment: MediaModel? = null,

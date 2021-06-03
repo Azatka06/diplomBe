@@ -12,6 +12,7 @@ import ru.sagutdinov.exception.NullUsernameOrPasswordException
 import ru.sagutdinov.exception.PasswordChangeException
 import ru.sagutdinov.exception.UserExistsException
 import ru.sagutdinov.model.AuthUserModel
+import ru.sagutdinov.model.MediaModel
 import ru.sagutdinov.model.StatusUser
 import ru.sagutdinov.repository.UserRepository
 
@@ -31,6 +32,12 @@ class UserService (
 
     suspend fun getByUserName(username: String): AuthUserModel? {
         return repo.getByUsername(username)
+    }
+
+    @KtorExperimentalAPI
+    suspend fun addImage(userId: Long, mediaModel: MediaModel) {
+        val user = repo.getByIdUser(userId) ?: throw NotFoundException()
+        repo.addImage(user, mediaModel)
     }
 
     @KtorExperimentalAPI

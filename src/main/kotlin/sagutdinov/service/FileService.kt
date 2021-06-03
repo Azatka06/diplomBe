@@ -8,7 +8,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import ru.sagutdinov.dto.MediaResponseDto
 import ru.sagutdinov.model.MediaModel
-import ru.sagutdinov.model.MediaType
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.util.*
@@ -47,7 +46,7 @@ class FileService(private val uploadPath: String) {
                             }
                         }
                         part.dispose()
-                        response = MediaResponseDto(name, MediaType.IMAGE)
+                        response = MediaResponseDto.fromModel(MediaModel(name))
                         return@forEachPart
                     }
                 }

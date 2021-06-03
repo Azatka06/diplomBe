@@ -1,9 +1,6 @@
 package ru.sagutdinov.repository
 
-import ru.sagutdinov.model.AuthUserModel
-import ru.sagutdinov.model.PostModel
-import ru.sagutdinov.model.ReactionModel
-import ru.sagutdinov.model.StatusUser
+import ru.sagutdinov.model.*
 import ru.sagutdinov.service.ServicePost
 
 interface UserRepository {
@@ -19,4 +16,6 @@ interface UserRepository {
     suspend fun checkReadOnly(idUser: Long, postService: ServicePost): Boolean
     suspend fun addPostId(user: AuthUserModel, idPost: Long)
     suspend fun listUsersReaction(post: PostModel): List<ReactionModel>
+    suspend fun addImage(user: AuthUserModel, mediaModel: MediaModel)
+
 }

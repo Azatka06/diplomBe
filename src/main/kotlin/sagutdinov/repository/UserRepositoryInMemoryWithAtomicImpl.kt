@@ -154,4 +154,11 @@ class UserRepositoryInMemoryWithAtomicImpl : UserRepository {
         }
         return listUsers.sortedWith(compareBy { it.date }).reversed()
     }
+
+    override suspend fun addImage(user: AuthUserModel, mediaModel: MediaModel) {
+        val index = items.indexOfFirst { it.idUser == user.idUser }
+        mutex.withLock {
+            items[index].attachmentImage = mediaModel.id
+        }
+    }
 }
